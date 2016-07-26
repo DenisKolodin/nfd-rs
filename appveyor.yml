@@ -1,0 +1,29 @@
+environment:
+  matrix:
+  - TARGET: x86_64-pc-windows-msvc
+  - TARGET: i686-pc-windows-msvc
+  - TARGET: x86_64-pc-windows-gnu
+  - TARGET: i686-pc-windows-gnu
+install:
+  - ps: >-
+      if ($env:TARGET -like "*msvc") {
+        echo "MSVC mode"
+        $exe = "rust-nightly-${env:TARGET}.exe"
+        $prm = "/VERYSILENT", "/NORESTART", "/DIR=C:\Program Files (x86)\Rust"
+        Start-FileDownload "https://static.rust-lang.org/dist/${exe}"
+        & $exe $prm
+        $env:Path += ";C:\Program Files (x86)\Rust\bin"
+        $env:Path += ";C:\MinGW\bin"
+      }
+      else {
+        echo "MinGW mode"
+      }
+  - cmd: cargo -V
+  - cmd: rustc -V
+
+build: false
+
+test_script:
+  - cargo build
+  - cargo build --release
+  - cargo test --verbose
