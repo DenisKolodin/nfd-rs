@@ -1,7 +1,11 @@
 [package]
 name = "nfd"
-version = "0.0.2"
-authors = ["Saurav Sachidanand <sauravsachidanand@gmail.com>", "Daniel Collin <daniel@collin>"]
+version = "0.0.3"
+authors = [
+	"Saurav Sachidanand <sauravsachidanand@gmail.com>",
+	"Daniel Collin <daniel@collin.com>",
+	"Denis Kolodin <deniskolodin@gmail.com>",
+]
 
 license = "MIT"
 repository = "https://www.github.com/saurvs/nfd-rs"

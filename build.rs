@@ -24,18 +24,25 @@ extern crate gcc;
 use std::env;
 use std::process::Command;
 
+macro_rules! nfd {
+    ($suf:expr) => {
+        concat!("nativefiledialog/src/", $suf);
+    };
+}
+
 fn main() {
     let mut cfg = gcc::Config::new();
     let env = env::var("TARGET").unwrap();
 
-    cfg.file("nfd/src/nfd_common.c");
+    cfg.include(nfd!("include"));
+    cfg.file(nfd!("nfd_common.c"));
 
     if env.contains("darwin") {
-        cfg.file("nfd/src/nfd_cocoa.m");
+        cfg.file(nfd!("nfd_cocoa.m"));
         cfg.compile("libnfd.a");
         println!("cargo:rustc-link-lib=framework=AppKit");
     } else if env.contains("windows") {
-        cfg.file("nfd/src/nfd_win.cpp");
+        cfg.file(nfd!("nfd_win.cpp"));
         cfg.compile("libnfd.a");
         println!("cargo:rustc-link-lib=ole32");
         // MinGW doesn't link it by default
@@ -60,7 +67,7 @@ fn main() {
             }
             _ => (),
         }
-        cfg.file("nfd/src/nfd_gtk.c");
+        cfg.file(nfd!("nfd_gtk.c"));
         cfg.compile("libnfd.a");
         println!("cargo:rustc-link-lib=gdk-3");
         println!("cargo:rustc-link-lib=gtk-3");
